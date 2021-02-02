@@ -1,0 +1,10 @@
+com/awd/Constants.java
+ com.awd.Constants
+com/awd/IoClass.java
+ com.awd.IoClass
+com/awd/Main.java
+ com.awd.Main
+com/awd/App.java
+ com.awd.App
+com/awd/CommandProcessor.java
+ com.awd.CommandProcessor
