@@ -5,6 +5,7 @@ plugins {
 
 group 'com.awd'
 version '1.0-SNAPSHOT'
+mainClassName = 'com.awd.Main'
 
 repositories {
     jcenter()
@@ -16,6 +17,6 @@ dependencies {
 
 jar {
     manifest {
-        attributes 'Main-Class': 'com.awd.Main'
+        attributes 'Main-Class': mainClassName
     }
 }
