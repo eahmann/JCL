@@ -1,10 +1,7 @@
 package com.awd;
 
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -33,7 +30,7 @@ public class CommandProcessor extends IoClass {
             listCommand(command);
         } else if (command[0].matches("(?i)^CHDIR")) {
             chdirCommand(command);
-        } else if (command[0].matches("(?i)^RUN ")) {
+        } else if (command[0].matches("(?i)^RUN")) {
             runCommand(command);
         } else if (command[0].matches("(?i)^REMOVE")) {
             removeCommand(command);
@@ -53,18 +50,26 @@ public class CommandProcessor extends IoClass {
     }
 
     private void execute(String[] command) {
-        String s;
-        Process p;
         try {
-            p = Runtime.getRuntime().exec(command[0], null, path);
-            BufferedReader br = new BufferedReader(
-                    new InputStreamReader(p.getInputStream()));
-            while ((s = br.readLine()) != null)
-                output.println(s);
+            Process p = Runtime.getRuntime().exec(command[0], null, path);
+
+            BufferedReader input =
+                    new BufferedReader(new InputStreamReader(p.getInputStream()));
+            BufferedReader error =
+                    new BufferedReader(new InputStreamReader(p.getErrorStream()));
+
+            String line = null;
+            while ((line = input.readLine()) != null) {
+                output.println(line);
+            }
+            while ((line = error.readLine()) != null) {
+                output.println(line);
+            }
             p.waitFor();
             p.destroy();
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        }
+        catch(Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -95,7 +100,8 @@ public class CommandProcessor extends IoClass {
 
     private void runCommand(String[] command) {
         output.println(command[0].toUpperCase() + " " + CMD_EXEC);
-        command[0] = "ls -l";
+        command[0] = command[1];
+        output.println(command[0]);
         execute(command);
     }
 

@@ -1,0 +1,13 @@
+
+}
+java:S4144l"[Update this method so that its implementation is not identical to "listCommand" on line 86.(ª÷­¤üÿÿÿÿ8ô›šˆö.
+O
+java:S1128"-Remove this unused import 'java.util.Arrays'.(î–˜Éüÿÿÿÿ8…Àˆö.
+h
+java:S1192X"FDefine a constant instead of duplicating this literal "ls -l" 3 times.(îã©Àùÿÿÿÿ8ô›šˆö.
+M
+java:S1128"0Remove this unused import 'java.util.ArrayList'.(÷‰îƒ8Œº“ˆö.
+k
+java:S1192"IDefine a constant instead of duplicating this literal "user.dir" 4 times.(ãùÖŸùÿÿÿÿ8Œº“ˆö.
+x
+java:S4144r"[Update this method so that its implementation is not identical to "listCommand" on line 86.(ó©—â8Œº“ˆö.
