@@ -13,6 +13,7 @@ public class Constants {
             "\nHELP - display this message", "\nQUIT - exit program"};
     static final String INSTRUCT = "To begin enter command at prompt. Type HELP to see commands\n";
     static final String GOOD_BYE = "\nThank you for using %s %s\n";
-    static final String CMD_EXEC = "COMMAND EXECUTED";
+    static final String CMD_EXEC = "is executing...";
+    static final String PATH_ERROR = "Error file or folder does not exist. Check input and try again";
 }
 

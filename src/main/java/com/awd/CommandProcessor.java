@@ -49,9 +49,35 @@ public class CommandProcessor extends IoClass {
         output.print("Enter Command:\n>> ");
     }
 
+    // Convert array into string
+    private String arrayConverter(String[] array) {
+        StringBuilder sb = new StringBuilder();
+        for (String str : array) {
+            sb.append(str).append(' ');
+        }
+        return sb.substring(0, sb.length() - 1);
+    }
+
+    // Remove element from array at index
+    private static String[] trimArray(String[] arr, int index) {
+        if (arr == null
+                || index < 0
+                || index >= arr.length) {
+            return arr;
+        }
+        String[] trimmedArray = new String[arr.length - 1];
+        for (int i = 0, k = 0; i < arr.length; i++) {
+            if (i == index) {
+                continue;
+            }
+            trimmedArray[k++] = arr[i];
+        }
+        return trimmedArray;
+    }
+
     private void execute(String[] command) {
         try {
-            Process p = Runtime.getRuntime().exec(command[0], null, path);
+            Process p = Runtime.getRuntime().exec(arrayConverter(command), null, path);
 
             BufferedReader input =
                     new BufferedReader(new InputStreamReader(p.getInputStream()));
@@ -67,15 +93,12 @@ public class CommandProcessor extends IoClass {
             }
             p.waitFor();
             p.destroy();
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     private void helpCommand() {
-        // Could rework to allow more details from commands like "HELP RUN" to give RUN specific help
-        // Maybe use HashMap (dictionary) ??
         output.println(COMMANDS_AVAIL);
         for (String commands : COMMANDS) {
             output.print(commands + " ");
@@ -86,9 +109,18 @@ public class CommandProcessor extends IoClass {
     private void listCommand(String[] command) {
         output.println(command[0].toUpperCase() + " " + CMD_EXEC);
         command[0] = "ls -l";
-        execute(command);
-
-
+        String filePath = "";
+        if (command.length == 2) {
+            filePath = command[1];
+            File file = new File(filePath);
+            if (file.exists() && file.isDirectory()) {
+                execute(command);
+            } else {
+                output.println(PATH_ERROR);
+            }
+        } else {
+            execute(command);
+        }
     }
 
     private void chdirCommand(String[] command) {
@@ -100,20 +132,39 @@ public class CommandProcessor extends IoClass {
 
     private void runCommand(String[] command) {
         output.println(command[0].toUpperCase() + " " + CMD_EXEC);
-        command[0] = command[1];
-        output.println(command[0]);
+        // we don't need a base command, so we remove it
+        command = trimArray(command, 0);
         execute(command);
     }
 
     private void removeCommand(String[] command) {
         output.println(command[0].toUpperCase() + " " + CMD_EXEC);
-        command[0] = "ls -l";
-        execute(command);
+        String filePath = "";
+        command[0] = "rm";
+        if (command.length == 2) {
+            filePath = System.getProperty("user.dir") + "/" + command[1];
+            File file = new File(filePath);
+            if (file.exists()) {
+                execute(command);
+            } else {
+                output.println(PATH_ERROR);
+            }
+        }
     }
 
     private void renameCommand(String[] command) {
         output.println(command[0].toUpperCase() + " " + CMD_EXEC);
-        command[0] = "ls -l";
-        execute(command);
+        String filePath = "";
+        command[0] = "mv";
+        if (command.length == 2) {
+            String[] path = command[1].split(" ");
+            filePath = System.getProperty("user.dir") + "/" + path[0];
+            File file = new File(filePath);
+            if (file.exists()) {
+                execute(command);
+            } else {
+                output.println(PATH_ERROR);
+            }
+        }
     }
 }
